@@ -1,4 +1,4 @@
-FROM alpine as builder
+FROM alpine:3.13.2 as builder
 
 RUN apk --no-cache add \
     --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
@@ -13,10 +13,10 @@ ARG XMRIG_BUILD_ARGS="-DCMAKE_BUILD_TYPE=Release"
 RUN git clone --depth 1 https://github.com/MoneroOcean/xmrig ./ && \
     sed -i 's/kMinimumDonateLevel = 1;/kMinimumDonateLevel = 0;/g' ./src/donate.h && \
     cmake ${XMRIG_BUILD_ARGS} . && \
-    make && \
+    make -j$(nproc) && \
     ./xmrig --help
 
-FROM alpine
+FROM alpine:3.13.2
 
 COPY --from=builder /xmrig/xmrig /bin/
 
