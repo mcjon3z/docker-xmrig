@@ -13,7 +13,7 @@ RUN git clone --depth 1 https://github.com/MoneroOcean/xmrig ./ && \
 
 FROM alpine
 
-COPY --from=builder /xmrig/xmrig /bin/
+COPY --from=builder /xmrig/build/xmrig /bin/
 
 ENTRYPOINT ["xmrig"]
 CMD [ "--help" ]
