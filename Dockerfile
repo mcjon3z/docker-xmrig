@@ -1,8 +1,7 @@
 FROM alpine as builder
 
-RUN echo 'https://dl-cdn.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories && \
-    apk update && \
-    apk --no-cache add git make cmake libstdc++ gcc g++ libuv-dev openssl-dev hwloc-dev
+RUN apk --no-cache add git make cmake libstdc++ gcc g++ libuv-dev openssl-dev && \
+    apk add hwloc-dev --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community/ --allow-untrusted
 
 WORKDIR /xmrig
 # Clone XMRIG
@@ -17,9 +16,8 @@ FROM alpine
 
 COPY --from=builder /xmrig/xmrig /bin/
 
-RUN echo 'https://dl-cdn.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories && \
-    apk update && \
-    apk --no-cache add libuv-dev openssl-dev hwloc-dev
+RUN apk --no-cache add libuv-dev openssl-dev && \
+    apk add hwloc-dev --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community/ --allow-untrusted
 
 ENTRYPOINT ["xmrig"]
 CMD [ "--help" ]
