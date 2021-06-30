@@ -19,7 +19,7 @@ RUN git clone --depth 1 https://github.com/MoneroOcean/xmrig ./ && \
 
 FROM alpine:3.12
 
-COPY --from=builder /xmrig/xmrig /bin/
+COPY --from=builder /xmrig/xmrig /xmrig/scripts/randomx_boost.sh /bin/
 
 RUN apk --no-cache add \
     libuv-dev
