@@ -1,10 +1,11 @@
-FROM alpine:edge as builder
+FROM alpine:3.12 as builder
 
-# RUN apk --no-cache add \
-#     --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
-#     hwloc-dev
+RUN apk --no-cache add git make cmake libstdc++ gcc g++ libuv-dev openssl-dev
 
-RUN apk --no-cache add git make cmake libstdc++ gcc g++ libuv-dev openssl-dev hwloc-dev
+RUN echo 'https://dl-cdn.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories && \
+    apk --no-cache add \
+    #--repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
+    hwloc-dev
 
 WORKDIR /xmrig
 
@@ -16,16 +17,17 @@ RUN git clone --depth 1 https://github.com/MoneroOcean/xmrig ./ && \
     make -j$(nproc) && \
     ./xmrig --help
 
-FROM alpine:edge
+FROM alpine:3.12
 
 COPY --from=builder /xmrig/xmrig /bin/
 
 RUN apk --no-cache add \
-    libuv-dev hwloc-dev
+    libuv-dev
 
-# RUN apk --no-cache add \
-#     --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
-#     hwloc-dev
+RUN echo 'https://dl-cdn.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories && \
+    apk --no-cache add \
+    #--repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
+    hwloc-dev
 
 ENTRYPOINT ["xmrig"]
 CMD [ "--help" ]
