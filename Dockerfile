@@ -19,15 +19,15 @@ RUN git clone --depth 1 https://github.com/MoneroOcean/xmrig ./ && \
 
 FROM alpine:3.12
 
-COPY --from=builder /xmrig/xmrig /xmrig/scripts/randomx_boost.sh /bin/
+COPY --from=builder /xmrig/xmrig /bin/
 
 RUN apk --no-cache add \
     libuv-dev
 
 RUN echo 'https://dl-cdn.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories && \
+    echo 'https://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/repositories && \
     apk --no-cache add \
-    #--repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
-    hwloc-dev
+    hwloc-dev msr-tools kmod
 
 ENTRYPOINT ["xmrig"]
 CMD [ "--help" ]
