@@ -27,7 +27,7 @@ jobs:
           - runner: ubuntu-latest
             platform: linux/amd64
             platform_tag: linux-amd64
-          - runner: ubuntu-arm64-latest
+          - runner: ubuntu-24.04-arm # ubuntu-latest currently does not support arm64: https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners#standard-github-hosted-runners-for-public-repositories
             platform: linux/arm64
             platform_tag: linux-arm64
 
@@ -96,7 +96,7 @@ jobs:
           retention-days: 1
 
   merge:
-    runs-on: ubuntu-24.04 # ubuntu-latest is not supported
+    runs-on: ubuntu-latest
     needs:
       - build
     steps:
