@@ -96,7 +96,7 @@ jobs:
           retention-days: 1
 
   merge:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04 # ubuntu-latest is not supported
     needs:
       - build
     steps:
