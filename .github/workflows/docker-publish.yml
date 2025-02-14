@@ -19,13 +19,18 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
       matrix:
-        platform:
-          - linux/amd64
-          - linux/arm64
+        include:
+          - runner: ubuntu-latest
+            platform: linux/amd64
+            platform_tag: linux-amd64
+          - runner: ubuntu-arm64-latest
+            platform: linux/arm64
+            platform_tag: linux-arm64
+
     steps:
       - name: Prepare
         run: |
@@ -73,6 +78,8 @@ jobs:
           platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}
           outputs: type=image,"name=${{ env.DOCKERHUB_REPO }},${{ env.GHCR_REPO }}",push-by-digest=true,name-canonical=true,push=true
+          cache-from: type=gha,scope=build-${{ matrix.platform_tag }}
+          cache-to: type=gha,scope=build-${{ matrix.platform_tag }},mode=max
 
       - name: Export digest
         run: |
@@ -83,7 +90,7 @@ jobs:
       - name: Upload digest
         uses: actions/upload-artifact@v4
         with:
-          name: digests-${{ env.PLATFORM_PAIR }}
+          name: ui-digests-${{ matrix.platform_tag }}
           path: ${{ runner.temp }}/digests/*
           if-no-files-found: error
           retention-days: 1
