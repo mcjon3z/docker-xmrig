@@ -15,7 +15,11 @@ on:
 
 env:
   DOCKERHUB_REPO: mcjon3z/xmrig
+  DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
+  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   GHCR_REPO: ghcr.io/mcjon3z/docker-xmrig
+  GHCR_USERNAME: ${{ github.repository_owner }}
+  GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build:
@@ -42,8 +46,8 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ${{ env.DOCKERHUB_REPO }}
-            ${{ env.GHCR_REPO }}
+            ${{ vars.DOCKERHUB_REPO }}
+            ${{ vars.GHCR_REPO }}
           tags: |
             type=sha
             type=ref,event=branch
@@ -56,17 +60,14 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          password: ${{ vars.DOCKERHUB_TOKEN }}
 
       - name: Login to GHCR
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Set up QEMU
-      #   uses: docker/setup-qemu-action@v3
+          username: ${{ vars.GHCR_USERNAME }}
+          password: ${{ vars.GHCR_TOKEN }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -111,14 +112,14 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          password: ${{ vars.DOCKERHUB_TOKEN }}
 
       - name: Login to GHCR
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ vars.GHCR_USERNAME }}
+          password: ${{ vars.GHCR_TOKEN }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -128,8 +129,8 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ${{ env.DOCKERHUB_REPO }}
-            ${{ env.GHCR_REPO }}
+            ${{ vars.DOCKERHUB_REPO }}
+            ${{ vars.GHCR_REPO }}
           tags: |
             type=ref,event=branch
             type=ref,event=pr
