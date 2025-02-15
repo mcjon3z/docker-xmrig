@@ -13,6 +13,10 @@ on:
   pull_request:
     branches: [ master ]
 
+permissions:
+  contents: read
+  packages: write
+
 env:
   DOCKERHUB_REPO: mcjon3z/xmrig
   DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
@@ -127,6 +131,7 @@ jobs:
             ${{ env.DOCKERHUB_REPO }}
             ${{ env.GHCR_REPO }}
           tags: |
+            type=sha
             type=ref,event=branch
             type=ref,event=pr
             type=semver,pattern={{version}}
