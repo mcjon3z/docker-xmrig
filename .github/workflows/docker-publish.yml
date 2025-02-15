@@ -48,7 +48,6 @@ jobs:
             ${{ env.DOCKERHUB_REPO }}
             ${{ env.GHCR_REPO }}
           tags: |
-            type=sha
             type=ref,event=branch
             type=ref,event=pr
             type=semver,pattern={{version}}
@@ -131,7 +130,6 @@ jobs:
             ${{ env.DOCKERHUB_REPO }}
             ${{ env.GHCR_REPO }}
           tags: |
-            type=sha
             type=ref,event=branch
             type=ref,event=pr
             type=semver,pattern={{version}}
